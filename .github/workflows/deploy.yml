@@ -1,0 +1,73 @@
+name: Build & Deploy (GitHub Pages)
+
+# Compila la app automáticamente en cada push y la publica en GitHub Pages.
+# No necesitas compilar nada en tu máquina: GitHub lo hace por ti.
+on:
+  push:
+    branches:
+      - main
+      - master
+      - 'claude/**'
+  workflow_dispatch: {} # permite lanzarlo manualmente desde la pestaña "Actions"
+
+# Permisos necesarios para publicar en Pages.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Evita despliegues simultáneos pisándose.
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        env:
+          # Sirve la app bajo /<nombre-del-repo>/ (requisito de GitHub Pages).
+          VITE_BASE: /${{ github.event.repository.name }}/
+          # Opcionales: si defines estas Variables en Settings → Secrets and
+          # variables → Actions → Variables, la app se conecta a tu backend GAS.
+          # Si NO las defines, la app arranca en modo demo (datos mock) y funciona igual.
+          VITE_GAS_URL: ${{ vars.VITE_GAS_URL }}
+          VITE_ADMIN_TOKEN: ${{ vars.VITE_ADMIN_TOKEN }}
+          VITE_USE_MOCK: ${{ vars.VITE_USE_MOCK }}
+        run: npm run build
+
+      - name: SPA fallback + .nojekyll
+        # 404.html = index.html para que las rutas internas (/admin, /producto/..)
+        # funcionen al recargar. .nojekyll evita que Pages ignore carpetas.
+        run: |
+          cp dist/index.html dist/404.html
+          touch dist/.nojekyll
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
