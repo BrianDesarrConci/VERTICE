@@ -1,0 +1,30 @@
+# Dependencias
+node_modules
+.pnpm-store
+
+# Builds
+dist
+dist-ssr
+*.local
+*.tsbuildinfo
+
+# Entorno
+.env
+.env.*.local
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Editores / SO
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
