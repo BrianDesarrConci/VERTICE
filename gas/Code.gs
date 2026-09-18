@@ -21,8 +21,8 @@
 // ---- Configuración global ----
 var ADMIN_TOKEN = 'vertice-dev-token'; // Debe coincidir con VITE_ADMIN_TOKEN del frontend.
 var TAX_RATE = 0.19;
-var FREE_SHIPPING_THRESHOLD = 3000000;
-var FLAT_SHIPPING = 25000;
+var FREE_SHIPPING_THRESHOLD = 250000;
+var FLAT_SHIPPING = 12000;
 
 // Nombres de hojas (entidades).
 var SHEETS = {
@@ -533,48 +533,59 @@ function seedData() {
     getSheet_(SHEETS.COUPONS).appendRow(r);
   });
 
-  // Categorías
+  // Categorías (merchandising)
   var img = function (id) { return 'https://images.unsplash.com/' + id + '?auto=format&fit=crop&w=1200&q=80'; };
   var categories = [
-    ['c1', 'iPhone', 'iphone', img('photo-1592286927505-1def25115558'), 1],
-    ['c2', 'Mac', 'mac', img('photo-1517336714731-489689fd1ca8'), 2],
-    ['c3', 'iPad', 'ipad', img('photo-1544244015-0df4b3ffc6b0'), 3],
-    ['c4', 'Watch', 'watch', img('photo-1546868871-7041f2a55e12'), 4],
-    ['c5', 'Audio', 'audio', img('photo-1606220945770-b5b6c2c55bf1'), 5],
-    ['c6', 'Accesorios', 'accesorios', img('photo-1583394838336-acd977736f90'), 6],
+    ['c1', 'Camisetas', 'camisetas', img('photo-1521572163474-6864f9cf17ab'), 1],
+    ['c2', 'Hoodies & Sacos', 'hoodies', img('photo-1556821840-3a63f95609a7'), 2],
+    ['c3', 'Libretas', 'libretas', img('photo-1531346878377-a5be20888e57'), 3],
+    ['c4', 'Totebags', 'totebags', img('photo-1597484661643-2f5fef640dd1'), 4],
+    ['c5', 'Gorras', 'gorras', img('photo-1588850561407-ed78c282e89b'), 5],
+    ['c6', 'Accesorios', 'accesorios', img('photo-1626785774573-4b799315345d'), 6],
   ];
   categories.forEach(function (r) { getSheet_(SHEETS.CATEGORIES).appendRow(r); });
 
+  // Tallas estándar para prendas.
+  var sizes = function (a, b, c, d) {
+    return [
+      { id: 't-s', name: 'Talla S', priceDelta: 0, stock: a },
+      { id: 't-m', name: 'Talla M', priceDelta: 0, stock: b },
+      { id: 't-l', name: 'Talla L', priceDelta: 0, stock: c },
+      { id: 't-xl', name: 'Talla XL', priceDelta: 5000, stock: d },
+    ];
+  };
+
   // Productos (id, sku, name, slug, description, price, cost, stock, category, brand, images, variants, rating, reviewsCount, featured, isNew, active, createdAt)
   var products = [
-    ['p1', 'IP15PM-256', 'iPhone 15 Pro Max', 'iphone-15-pro-max', 'Titanio. Chip A17 Pro. Cámaras Pro con teleobjetivo 5x.', 6499000, 4800000, 12, 'iphone', 'Apple',
-      JSON.stringify([img('photo-1695048133142-1a20484d2569'), img('photo-1592286927505-1def25115558')]),
-      JSON.stringify([{ id: 'v1', name: '256 GB — Titanio Natural', priceDelta: 0, stock: 6 }, { id: 'v2', name: '512 GB — Titanio Azul', priceDelta: 900000, stock: 4 }, { id: 'v3', name: '1 TB — Titanio Negro', priceDelta: 1800000, stock: 2 }]),
-      4.9, 1284, true, true, true, new Date().toISOString()],
-    ['p2', 'MBP14-M3', 'MacBook Pro 14"', 'macbook-pro-14', 'Chip M3 Pro. Pantalla Liquid Retina XDR. Hasta 18h de batería.', 9999000, 7600000, 7, 'mac', 'Apple',
-      JSON.stringify([img('photo-1517336714731-489689fd1ca8'), img('photo-1541807084-5c52b6b3adef')]),
-      JSON.stringify([{ id: 'v4', name: 'M3 Pro · 18 GB · 512 GB', priceDelta: 0, stock: 4 }, { id: 'v5', name: 'M3 Pro · 36 GB · 1 TB', priceDelta: 2400000, stock: 3 }]),
-      4.8, 642, true, true, true, new Date().toISOString()],
-    ['p3', 'APP-2GEN', 'AirPods Pro (2.ª gen)', 'airpods-pro-2', 'Cancelación activa de ruido 2x. Audio espacial. Estuche USB-C.', 1099000, 720000, 34, 'audio', 'Apple',
-      JSON.stringify([img('photo-1606220945770-b5b6c2c55bf1')]), JSON.stringify([]),
-      4.7, 2210, true, false, true, new Date().toISOString()],
-    ['p4', 'IPADAIR-M2', 'iPad Air 11"', 'ipad-air-11', 'Chip M2. Compatible con Apple Pencil Pro. Liquid Retina 11".', 3299000, 2400000, 18, 'ipad', 'Apple',
-      JSON.stringify([img('photo-1544244015-0df4b3ffc6b0')]),
-      JSON.stringify([{ id: 'v6', name: '128 GB · WiFi', priceDelta: 0, stock: 10 }, { id: 'v7', name: '256 GB · WiFi', priceDelta: 500000, stock: 8 }]),
-      4.6, 431, false, true, true, new Date().toISOString()],
-    ['p5', 'AWU2-49', 'Apple Watch Ultra 2', 'apple-watch-ultra-2', 'Titanio 49 mm. GPS doble frecuencia. Hasta 36h de batería.', 4199000, 3100000, 9, 'watch', 'Apple',
-      JSON.stringify([img('photo-1546868871-7041f2a55e12')]), JSON.stringify([]),
-      4.8, 358, true, false, true, new Date().toISOString()],
-    ['p6', 'MGKB-USB', 'Magic Keyboard', 'magic-keyboard', 'Teclado inalámbrico con Touch ID, recargable USB-C.', 649000, 410000, 3, 'accesorios', 'Apple',
-      JSON.stringify([img('photo-1587829741301-dc798b83add3')]), JSON.stringify([]),
-      4.5, 189, false, false, true, new Date().toISOString()],
-    ['p7', 'IP15-128', 'iPhone 15', 'iphone-15', 'Dynamic Island. Cámara 48 MP. USB-C. Chip A16 Bionic.', 4299000, 3200000, 21, 'iphone', 'Apple',
-      JSON.stringify([img('photo-1592286927505-1def25115558')]),
-      JSON.stringify([{ id: 'v8', name: '128 GB — Rosa', priceDelta: 0, stock: 11 }, { id: 'v9', name: '256 GB — Azul', priceDelta: 600000, stock: 10 }]),
-      4.7, 903, false, false, true, new Date().toISOString()],
-    ['p8', 'MBAIR-M3', 'MacBook Air 13"', 'macbook-air-13', 'Chip M3. Ultraligero. Liquid Retina. Hasta 18h de batería.', 5499000, 4100000, 14, 'mac', 'Apple',
-      JSON.stringify([img('photo-1541807084-5c52b6b3adef')]), JSON.stringify([]),
-      4.8, 521, false, true, true, new Date().toISOString()],
+    ['p1', 'CAM-OVR-IMP', 'Camiseta Oversize "Impacto"', 'camiseta-oversize-impacto', 'Algodón 100% peinado 190 g. Estampado de alta durabilidad. Corte oversize con caída perfecta.', 69000, 32000, 40, 'camisetas', 'VÉRTICE',
+      JSON.stringify([img('photo-1576566588028-4147f3842f27'), img('photo-1521572163474-6864f9cf17ab')]),
+      JSON.stringify(sizes(12, 14, 10, 4)),
+      4.9, 214, true, true, true, new Date().toISOString()],
+    ['p2', 'HOO-PRM-BRD', 'Hoodie Premium Bordado', 'hoodie-premium-bordado', 'Felpa perchada 320 g, interior suave. Bordado premium en pecho y bolsillo canguro.', 159000, 78000, 22, 'hoodies', 'VÉRTICE',
+      JSON.stringify([img('photo-1556821840-3a63f95609a7'), img('photo-1620799140408-edc6dcb6d633')]),
+      JSON.stringify(sizes(6, 8, 6, 2)),
+      4.8, 156, true, true, true, new Date().toISOString()],
+    ['p3', 'LIB-A5-TD', 'Libreta A5 Tapa Dura', 'libreta-a5-tapa-dura', 'Tapa dura, 160 páginas de 90 g, elástico y bolsillo interior. Portada personalizada.', 38000, 15000, 80, 'libretas', 'VÉRTICE',
+      JSON.stringify([img('photo-1531346878377-a5be20888e57'), img('photo-1517842645767-c639042777db')]),
+      JSON.stringify([{ id: 'v-ray', name: 'Interior rayado', priceDelta: 0, stock: 30 }, { id: 'v-pun', name: 'Interior de puntos', priceDelta: 0, stock: 28 }, { id: 'v-lis', name: 'Interior liso', priceDelta: 0, stock: 22 }]),
+      4.7, 98, true, false, true, new Date().toISOString()],
+    ['p4', 'TOT-LON-EST', 'Totebag de Lona Estampada', 'totebag-lona-estampada', 'Lona de algodón resistente, asas reforzadas y estampado a gran formato. Ecológica y lavable.', 45000, 18000, 60, 'totebags', 'VÉRTICE',
+      JSON.stringify([img('photo-1597484661643-2f5fef640dd1'), img('photo-1544816155-12df9643f363')]), JSON.stringify([]),
+      4.6, 74, false, true, true, new Date().toISOString()],
+    ['p5', 'SAC-EST-CR', 'Saco Estampado Cuello Redondo', 'saco-estampado-cuello-redondo', 'Crewneck en mezcla de algodón 300 g. Estampado frontal de alta definición.', 129000, 60000, 18, 'hoodies', 'VÉRTICE',
+      JSON.stringify([img('photo-1509942774463-acf339cf87d5'), img('photo-1618354691373-d851c5c3a990')]),
+      JSON.stringify(sizes(5, 6, 5, 2)),
+      4.8, 63, true, false, true, new Date().toISOString()],
+    ['p6', 'GOR-BRD-CL', 'Gorra Bordada Clásica', 'gorra-bordada-clasica', 'Gorra de 6 paneles, visera curva, bordado 3D y cierre ajustable.', 55000, 22000, 35, 'gorras', 'VÉRTICE',
+      JSON.stringify([img('photo-1588850561407-ed78c282e89b'), img('photo-1521369909029-2afed882baee')]), JSON.stringify([]),
+      4.5, 41, false, false, true, new Date().toISOString()],
+    ['p7', 'CAM-CLS-EST', 'Camiseta Clásica Estampada', 'camiseta-clasica-estampada', 'Corte regular en algodón 160 g. Estampado serigráfico duradero. El básico que combina con todo.', 59000, 26000, 55, 'camisetas', 'VÉRTICE',
+      JSON.stringify([img('photo-1583743814966-8936f5b7be1a'), img('photo-1503341504253-dff4815485f1')]),
+      JSON.stringify(sizes(16, 18, 14, 7)),
+      4.7, 187, false, false, true, new Date().toISOString()],
+    ['p8', 'STK-SET-10', 'Set de Stickers (x10)', 'set-stickers-x10', 'Pack de 10 stickers de vinilo resistente al agua, corte de precisión y colores vibrantes.', 25000, 8000, 120, 'accesorios', 'VÉRTICE',
+      JSON.stringify([img('photo-1626785774573-4b799315345d'), img('photo-1600783245526-8b6f0f5b0f62')]), JSON.stringify([]),
+      4.9, 132, false, true, true, new Date().toISOString()],
   ];
   products.forEach(function (r) { getSheet_(SHEETS.PRODUCTS).appendRow(r); });
 
