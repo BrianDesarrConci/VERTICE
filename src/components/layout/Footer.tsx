@@ -5,10 +5,10 @@ const COLUMNS = [
   {
     title: 'Comprar',
     links: [
-      { label: 'iPhone', to: '/catalogo/iphone' },
-      { label: 'Mac', to: '/catalogo/mac' },
-      { label: 'iPad', to: '/catalogo/ipad' },
-      { label: 'Watch', to: '/catalogo/watch' },
+      { label: 'Camisetas', to: '/catalogo/camisetas' },
+      { label: 'Hoodies & Sacos', to: '/catalogo/hoodies' },
+      { label: 'Libretas', to: '/catalogo/libretas' },
+      { label: 'Totebags', to: '/catalogo/totebags' },
       { label: 'Accesorios', to: '/catalogo/accesorios' },
     ],
   },
@@ -36,9 +36,9 @@ export function Footer() {
     <footer className="mt-24 border-t border-border bg-muted/30">
       {/* Certificaciones */}
       <div className="container grid grid-cols-1 gap-6 border-b border-border py-10 sm:grid-cols-3">
-        <Trust icon={<Truck className="h-5 w-5" />} title="Envío gratis" desc="En compras sobre $3.000.000" />
-        <Trust icon={<ShieldCheck className="h-5 w-5" />} title="Garantía oficial" desc="Hasta 12 meses de cobertura" />
-        <Trust icon={<CreditCard className="h-5 w-5" />} title="Paga a cuotas" desc="Hasta 36 meses sin cuota inicial" />
+        <Trust icon={<Truck className="h-5 w-5" />} title="Envío gratis" desc="En compras sobre $250.000" />
+        <Trust icon={<ShieldCheck className="h-5 w-5" />} title="Calidad garantizada" desc="Estampados que duran, o te devolvemos" />
+        <Trust icon={<CreditCard className="h-5 w-5" />} title="Pago seguro" desc="Tarjeta, PSE, Nequi y contra entrega" />
       </div>
 
       <div className="container grid grid-cols-2 gap-8 py-14 md:grid-cols-5">
@@ -48,8 +48,8 @@ export function Footer() {
             VÉRTICE
           </Link>
           <p className="mt-3 max-w-xs text-sm text-muted-foreground">
-            Tecnología premium con la mejor experiencia de compra. Productos originales, garantía y
-            envío a todo el país.
+            Merchandising que deja huella. Camisetas, hoodies, libretas y más, estampados con
+            calidad premium y envío a todo el país.
           </p>
           <div className="mt-4 flex gap-2">
             {[Instagram, Facebook, Twitter, Youtube].map((Icon, i) => (

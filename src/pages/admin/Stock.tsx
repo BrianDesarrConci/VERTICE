@@ -247,7 +247,7 @@ function ProductModal({ product, onClose, onSaved }: { product: Product; onClose
       const payload: Product = {
         ...form,
         slug: form.slug || slugify(form.name),
-        images: form.images.length ? form.images : ['https://images.unsplash.com/photo-1592286927505-1def25115558?auto=format&fit=crop&w=1200&q=80'],
+        images: form.images.length ? form.images : ['https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=1200&q=80'],
       };
       await api.saveProduct(payload);
       onSaved();
@@ -271,7 +271,7 @@ function ProductModal({ product, onClose, onSaved }: { product: Product; onClose
             onChange={(e) => set('category', e.target.value)}
             className="h-11 w-full rounded-xl border border-input bg-background px-4 text-[15px] focus:outline-none focus:ring-2 focus:ring-ring/50"
           >
-            {['iphone', 'mac', 'ipad', 'watch', 'audio', 'accesorios'].map((c) => (
+            {['camisetas', 'hoodies', 'libretas', 'totebags', 'gorras', 'accesorios'].map((c) => (
               <option key={c} value={c}>{c}</option>
             ))}
           </select>

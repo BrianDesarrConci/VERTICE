@@ -7,11 +7,11 @@ import { ThemeToggle } from '@/components/theme/ThemeToggle';
 import { cn } from '@/lib/utils';
 
 const NAV = [
-  { to: '/catalogo/iphone', label: 'iPhone' },
-  { to: '/catalogo/mac', label: 'Mac' },
-  { to: '/catalogo/ipad', label: 'iPad' },
-  { to: '/catalogo/watch', label: 'Watch' },
-  { to: '/catalogo/audio', label: 'Audio' },
+  { to: '/catalogo/camisetas', label: 'Camisetas' },
+  { to: '/catalogo/hoodies', label: 'Hoodies' },
+  { to: '/catalogo/libretas', label: 'Libretas' },
+  { to: '/catalogo/totebags', label: 'Totebags' },
+  { to: '/catalogo/gorras', label: 'Gorras' },
   { to: '/catalogo', label: 'Tienda' },
 ];
 

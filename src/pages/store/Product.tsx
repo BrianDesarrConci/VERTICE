@@ -55,7 +55,6 @@ export function Product() {
 
   const currentStock = variant ? variant.stock : product.stock;
   const price = product.price + (variant?.priceDelta ?? 0);
-  const installment = Math.round(price / 36);
   const relatedProducts = (related.data ?? [])
     .filter((p) => p.category === product.category && p.id !== product.id)
     .slice(0, 4);
@@ -134,9 +133,7 @@ export function Product() {
 
           <div className="mt-6">
             <p className="text-4xl font-semibold tracking-tight">{formatCurrency(price)}</p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              o {formatCurrency(installment)}/mes a 36 cuotas
-            </p>
+            <p className="mt-1 text-sm text-muted-foreground">IVA incluido · Envío calculado al pagar</p>
           </div>
 
           <p className="mt-6 leading-relaxed text-muted-foreground">{product.description}</p>
@@ -227,9 +224,9 @@ export function Product() {
 
           {/* Garantías */}
           <div className="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-3">
-            <Perk icon={<Truck className="h-5 w-5" />} text="Envío gratis y rápido" />
-            <Perk icon={<ShieldCheck className="h-5 w-5" />} text="Garantía oficial 12 meses" />
-            <Perk icon={<RotateCcw className="h-5 w-5" />} text="Devolución en 30 días" />
+            <Perk icon={<Truck className="h-5 w-5" />} text="Envío a todo el país" />
+            <Perk icon={<ShieldCheck className="h-5 w-5" />} text="Estampado que no se agrieta" />
+            <Perk icon={<RotateCcw className="h-5 w-5" />} text="Cambios en 30 días" />
           </div>
         </div>
       </div>
@@ -295,7 +292,7 @@ function SpecsTab({ product }: { product: ProductType }) {
     ['Marca', product.brand],
     ['Categoría', product.category],
     ['Calificación', `${product.rating.toFixed(1)} / 5`],
-    ['Garantía', '12 meses'],
+    ['Técnica', 'Estampado de alta durabilidad'],
     ['Disponibilidad', product.stock > 0 ? 'En stock' : 'Agotado'],
   ];
   return (
@@ -317,15 +314,15 @@ function ShippingTab() {
     <div className="max-w-2xl space-y-4 text-sm text-muted-foreground">
       <p>
         <strong className="text-foreground">Envío gratis</strong> en compras superiores a
-        $3.000.000. Entregas en 24-72 horas hábiles en las principales ciudades.
+        $250.000. Entregas en 2-5 días hábiles a todo el país.
       </p>
       <p>
-        <strong className="text-foreground">Garantía oficial</strong> de 12 meses contra defectos de
-        fabricación. Soporte técnico especializado.
+        <strong className="text-foreground">Calidad garantizada</strong>: si el estampado se agrieta
+        o presenta defectos de fabricación, lo reponemos.
       </p>
       <p>
-        <strong className="text-foreground">Devoluciones</strong> dentro de los primeros 30 días,
-        sin preguntas, con producto en su empaque original.
+        <strong className="text-foreground">Cambios</strong> dentro de los primeros 30 días, con la
+        prenda sin usar y su etiqueta original.
       </p>
     </div>
   );
