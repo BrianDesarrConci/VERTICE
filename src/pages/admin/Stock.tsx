@@ -4,6 +4,7 @@ import { Download, Pencil, Plus, Search, Trash2, TrendingDown, TrendingUp, X } f
 import type { Department, Product, ProductVariant } from '@/lib/types';
 import { DEPARTMENTS } from '@/lib/types';
 import { api } from '@/lib/api';
+import { toast } from '@/stores/toastStore';
 import { shortId } from '@/lib/utils';
 import { useAsync } from '@/hooks/useAsync';
 import { Button } from '@/components/ui/button';
@@ -49,8 +50,13 @@ export function Stock() {
 
   const handleDelete = async (id: string) => {
     if (!confirm('¿Eliminar este producto? Esta acción no se puede deshacer.')) return;
-    await api.deleteProduct(id);
-    reload();
+    try {
+      await api.deleteProduct(id);
+      toast.success('Producto eliminado');
+      reload();
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : 'No se pudo eliminar');
+    }
   };
 
   const exportCSV = () => {
@@ -270,7 +276,10 @@ function ProductModal({ product, onClose, onSaved }: { product: Product; onClose
         images: form.images.length ? form.images.filter(Boolean) : ['https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=1200&q=80'],
       };
       await api.saveProduct(payload);
+      toast.success('Producto guardado');
       onSaved();
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : 'No se pudo guardar el producto');
     } finally {
       setSaving(false);
     }
@@ -388,7 +397,10 @@ function AdjustModal({ product, onClose, onSaved }: { product: Product; onClose:
     setSaving(true);
     try {
       await api.adjustStock(product.id, type, qty, reason);
+      toast.success(`Stock ${type === 'in' ? 'sumado' : 'restado'}: ${qty} u.`);
       onSaved();
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : 'No se pudo ajustar el stock');
     } finally {
       setSaving(false);
     }

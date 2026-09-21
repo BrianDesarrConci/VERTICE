@@ -63,28 +63,100 @@ class ApiError extends Error {
 
 // ---------- Transporte HTTP real hacia GAS ----------
 
+/** Info del backend para la página de diagnóstico. */
+export const BACKEND = { url: GAS_URL, usingMock: USING_MOCK };
+
+/**
+ * Lee la respuesta de GAS de forma tolerante: si no es JSON (p. ej. GAS devolvió
+ * una página HTML de login porque el Web App NO tiene acceso anónimo), lanza un
+ * error claro y accionable en vez de un críptico "Unexpected token".
+ */
+async function readGas<T>(res: Response): Promise<T> {
+  const text = await res.text();
+  let json: ApiResult<T> | null = null;
+  try {
+    json = JSON.parse(text) as ApiResult<T>;
+  } catch {
+    const looksHtml = text.trim().startsWith('<') || /accounts\.google\.com|iniciar sesión|sign in/i.test(text);
+    if (looksHtml) {
+      throw new ApiError(
+        'El Web App respondió HTML en vez de JSON. Casi siempre significa que el Deploy NO tiene acceso "Cualquier persona" (anónimo), o que hay que publicar una versión nueva.',
+        'BACKEND_HTML',
+      );
+    }
+    throw new ApiError('Respuesta no válida del backend (no es JSON). HTTP ' + res.status, 'BAD_RESPONSE');
+  }
+  if (!json.success) throw new ApiError(json.error, json.code);
+  return json.data;
+}
+
 async function gasGet<T>(action: string, params: Record<string, string> = {}): Promise<T> {
   const url = new URL(GAS_URL as string);
   url.searchParams.set('action', action);
   for (const [k, v] of Object.entries(params)) url.searchParams.set(k, v);
-  const res = await fetch(url.toString(), { method: 'GET', redirect: 'follow' });
-  const json = (await res.json()) as ApiResult<T>;
-  if (!json.success) throw new ApiError(json.error, json.code);
-  return json.data;
+  let res: Response;
+  try {
+    res = await fetch(url.toString(), { method: 'GET', redirect: 'follow' });
+  } catch (e) {
+    throw new ApiError(
+      'No se pudo contactar el backend (posible bloqueo CORS o URL incorrecta): ' + (e instanceof Error ? e.message : String(e)),
+      'NETWORK',
+    );
+  }
+  return readGas<T>(res);
 }
 
 async function gasPost<T>(action: string, body: Record<string, unknown>, admin = false): Promise<T> {
   // text/plain evita el preflight CORS en GAS.
   const payload = { action, ...(admin ? { token: ADMIN_TOKEN } : {}), ...body };
-  const res = await fetch(GAS_URL as string, {
-    method: 'POST',
-    redirect: 'follow',
-    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-    body: JSON.stringify(payload),
-  });
-  const json = (await res.json()) as ApiResult<T>;
-  if (!json.success) throw new ApiError(json.error, json.code);
-  return json.data;
+  let res: Response;
+  try {
+    res = await fetch(GAS_URL as string, {
+      method: 'POST',
+      redirect: 'follow',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(payload),
+    });
+  } catch (e) {
+    throw new ApiError(
+      'No se pudo contactar el backend (posible bloqueo CORS o URL incorrecta): ' + (e instanceof Error ? e.message : String(e)),
+      'NETWORK',
+    );
+  }
+  return readGas<T>(res);
+}
+
+/** Prueba de conexión cruda (para la página de diagnóstico). */
+export async function pingBackend(): Promise<{
+  ok: boolean;
+  status: number;
+  contentType: string;
+  snippet: string;
+  parsedOk: boolean;
+  error?: string;
+}> {
+  try {
+    const url = new URL(GAS_URL as string);
+    url.searchParams.set('action', 'getConfig');
+    const res = await fetch(url.toString(), { method: 'GET', redirect: 'follow' });
+    const text = await res.text();
+    let parsedOk = false;
+    try {
+      const j = JSON.parse(text);
+      parsedOk = !!j && typeof j.success === 'boolean';
+    } catch {
+      parsedOk = false;
+    }
+    return {
+      ok: res.ok && parsedOk,
+      status: res.status,
+      contentType: res.headers.get('content-type') || '',
+      snippet: text.slice(0, 240),
+      parsedOk,
+    };
+  } catch (e) {
+    return { ok: false, status: 0, contentType: '', snippet: '', parsedOk: false, error: e instanceof Error ? e.message : String(e) };
+  }
 }
 
 // ---------- Estado mock (en memoria durante la sesión) ----------
@@ -216,7 +288,17 @@ export const api = {
       }
       throw new ApiError('Credenciales inválidas', 'AUTH_FAILED');
     }
-    return gasPost<AdminSession>('adminLogin', { email, password });
+    try {
+      return await gasPost<AdminSession>('adminLogin', { email, password });
+    } catch (e) {
+      // Respaldo: si el backend no responde (red/CORS/deploy), permite entrar
+      // con las credenciales demo para poder usar el Diagnóstico y no quedar bloqueado.
+      const isConnErr = e instanceof ApiError && (e.code === 'NETWORK' || e.code === 'BACKEND_HTML' || e.code === 'BAD_RESPONSE');
+      if (isConnErr && email === 'admin@vertice.co' && password === 'vertice123') {
+        return { token: ADMIN_TOKEN, email, role: 'owner' };
+      }
+      throw e;
+    }
   },
 
   async getDashboard(): Promise<DashboardStats> {

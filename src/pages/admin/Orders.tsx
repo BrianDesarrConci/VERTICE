@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Check, Search, X } from 'lucide-react';
 import type { Order, OrderStatus } from '@/lib/types';
 import { api } from '@/lib/api';
+import { toast } from '@/stores/toastStore';
 import { useAsync } from '@/hooks/useAsync';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -131,7 +132,10 @@ function OrderDetail({ order, onClose, onUpdated }: { order: Order; onClose: () 
     setSaving(status);
     try {
       const updated = await api.updateOrderStatus(order.id, status);
+      toast.success(`Pedido ${order.id} → ${STATUS_META[status].label}`);
       onUpdated(updated);
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : 'No se pudo actualizar el pedido');
     } finally {
       setSaving(null);
     }

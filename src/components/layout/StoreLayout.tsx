@@ -4,6 +4,7 @@ import { Header } from './Header';
 import { Footer } from './Footer';
 import { GradientBlobs } from './GradientBlobs';
 import { CartDrawer } from '@/components/cart/CartDrawer';
+import { Toaster } from '@/components/ui/toaster';
 
 /** Layout de la tienda: burbujas de fondo + header + contenido + footer + carrito. */
 export function StoreLayout() {
@@ -25,6 +26,7 @@ export function StoreLayout() {
         <Footer />
       </div>
       <CartDrawer />
+      <Toaster />
     </div>
   );
 }

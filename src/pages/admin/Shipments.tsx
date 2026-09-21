@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { ChevronRight, Package, Truck } from 'lucide-react';
 import type { Shipment, ShipmentStatus } from '@/lib/types';
 import { api } from '@/lib/api';
+import { toast } from '@/stores/toastStore';
 import { useAsync } from '@/hooks/useAsync';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -33,8 +34,13 @@ export function Shipments() {
   const advance = async (s: Shipment) => {
     const next = NEXT[s.status];
     if (!next) return;
-    await api.updateShipmentStatus(s.id, next);
-    reload();
+    try {
+      await api.updateShipmentStatus(s.id, next);
+      toast.success(`Despacho ${s.orderId} actualizado`);
+      reload();
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : 'No se pudo actualizar el despacho');
+    }
   };
 
   return (
@@ -132,7 +138,10 @@ function ShipmentModal({ shipment, onClose, onSaved }: { shipment: Shipment; onC
     setSaving(true);
     try {
       await api.updateShipment(shipment.id, { tracking, courier });
+      toast.success('Despacho guardado');
       onSaved();
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : 'No se pudo guardar el despacho');
     } finally {
       setSaving(false);
     }
