@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Pencil, Plus, Ticket, Trash2, X } from 'lucide-react';
 import type { Coupon } from '@/lib/types';
 import { api } from '@/lib/api';
+import { toast } from '@/stores/toastStore';
 import { useAsync } from '@/hooks/useAsync';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -17,13 +18,23 @@ export function Coupons() {
   const [editing, setEditing] = React.useState<Coupon | null>(null);
 
   const toggle = async (c: Coupon) => {
-    await api.saveCoupon({ ...c, active: !c.active });
-    reload();
+    try {
+      await api.saveCoupon({ ...c, active: !c.active });
+      toast.success(`Cupón ${c.code} ${!c.active ? 'activado' : 'desactivado'}`);
+      reload();
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : 'No se pudo actualizar');
+    }
   };
   const remove = async (code: string) => {
     if (!confirm(`¿Eliminar el cupón ${code}?`)) return;
-    await api.deleteCoupon(code);
-    reload();
+    try {
+      await api.deleteCoupon(code);
+      toast.success(`Cupón ${code} eliminado`);
+      reload();
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : 'No se pudo eliminar');
+    }
   };
 
   return (
@@ -89,7 +100,10 @@ function CouponModal({ coupon, onClose, onSaved }: { coupon: Coupon; onClose: ()
     setSaving(true);
     try {
       await api.saveCoupon({ ...form, code: form.code.trim().toUpperCase() });
+      toast.success('Cupón guardado');
       onSaved();
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : 'No se pudo guardar el cupón');
     } finally {
       setSaving(false);
     }

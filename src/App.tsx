@@ -22,6 +22,7 @@ import { Customers } from '@/pages/admin/Customers';
 import { Analytics } from '@/pages/admin/Analytics';
 import { Coupons } from '@/pages/admin/Coupons';
 import { Content } from '@/pages/admin/Content';
+import { Diagnostics } from '@/pages/admin/Diagnostics';
 import { Settings } from '@/pages/admin/Settings';
 
 import { NotFound } from '@/pages/NotFound';
@@ -60,6 +61,7 @@ export default function App() {
         <Route path="contenido" element={<Content />} />
         <Route path="clientes" element={<Customers />} />
         <Route path="analytics" element={<Analytics />} />
+        <Route path="diagnostico" element={<Diagnostics />} />
         <Route path="configuracion" element={<Settings />} />
       </Route>
 

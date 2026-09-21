@@ -4,22 +4,25 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#0a0f08" />
     <meta
       name="description"
       content="VÉRTICE — Merchandising premium. Camisetas, hoodies, libretas y totebags estampados con calidad. Diseño que deja huella."
     />
     <title>VÉRTICE — Merchandising premium</title>
-    <!-- Anti-FOUC: aplica el tema antes de pintar para evitar parpadeo en modo oscuro -->
+    <!-- Anti-FOUC: aplica el tema antes de pintar. Por defecto MODO OSCURO;
+         solo usa claro si el usuario lo eligió explícitamente (guardado por Zustand). -->
     <script>
       (function () {
+        var theme = 'dark'; // default de la marca
         try {
-          var stored = localStorage.getItem('vertice-theme');
-          var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-          var isDark = stored ? stored === 'dark' : prefersDark;
-          if (isDark) document.documentElement.classList.add('dark');
+          var raw = localStorage.getItem('vertice-theme');
+          if (raw) {
+            var parsed = JSON.parse(raw);
+            if (parsed && parsed.state && parsed.state.theme) theme = parsed.state.theme;
+          }
         } catch (e) {}
+        if (theme !== 'light') document.documentElement.classList.add('dark');
       })();
     </script>
   </head>

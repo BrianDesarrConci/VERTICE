@@ -5,6 +5,7 @@ import type { SiteContent } from '@/lib/types';
 import { api } from '@/lib/api';
 import { useAsync } from '@/hooks/useAsync';
 import { setSiteContentCache } from '@/hooks/useSiteContent';
+import { toast } from '@/stores/toastStore';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -41,7 +42,10 @@ export function Content() {
       const res = await api.saveContent(form);
       setSiteContentCache(res); // refresca la tienda sin recargar
       setSaved(true);
+      toast.success('Contenido guardado y publicado');
       setTimeout(() => setSaved(false), 2500);
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : 'No se pudo guardar el contenido');
     } finally {
       setSaving(false);
     }

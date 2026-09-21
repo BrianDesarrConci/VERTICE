@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom';
 import {
+  Activity,
   BarChart3,
   Boxes,
   Image,
@@ -16,6 +17,7 @@ import {
 import { useAuthStore } from '@/stores/authStore';
 import { ThemeToggle } from '@/components/theme/ThemeToggle';
 import { Badge } from '@/components/ui/badge';
+import { Toaster } from '@/components/ui/toaster';
 import { cn } from '@/lib/utils';
 
 const NAV = [
@@ -27,6 +29,7 @@ const NAV = [
   { to: '/admin/contenido', label: 'Contenido', icon: Image },
   { to: '/admin/clientes', label: 'Clientes', icon: Users },
   { to: '/admin/analytics', label: 'Analytics', icon: BarChart3 },
+  { to: '/admin/diagnostico', label: 'Diagnóstico', icon: Activity },
   { to: '/admin/configuracion', label: 'Configuración', icon: Settings },
 ];
 
@@ -127,6 +130,7 @@ export function AdminLayout() {
           <Outlet />
         </main>
       </div>
+      <Toaster />
     </div>
   );
 }
