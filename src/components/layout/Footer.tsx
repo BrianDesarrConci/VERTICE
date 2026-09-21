@@ -5,28 +5,26 @@ const COLUMNS = [
   {
     title: 'Comprar',
     links: [
-      { label: 'Camisetas', to: '/catalogo/camisetas' },
-      { label: 'Hoodies & Sacos', to: '/catalogo/hoodies' },
-      { label: 'Libretas', to: '/catalogo/libretas' },
-      { label: 'Totebags', to: '/catalogo/totebags' },
-      { label: 'Accesorios', to: '/catalogo/accesorios' },
+      { label: 'Dama', to: '/categorias/dama' },
+      { label: 'Caballero', to: '/categorias/caballero' },
+      { label: 'Niño', to: '/categorias/nino' },
+      { label: 'Toda la colección', to: '/catalogo' },
     ],
   },
   {
-    title: 'Cuenta',
+    title: 'VÉRTICE',
     links: [
-      { label: 'Iniciar sesión', to: '/cuenta' },
-      { label: 'Mis pedidos', to: '/cuenta' },
-      { label: 'Lista de deseos', to: '/cuenta' },
+      { label: '¿Quiénes Somos?', to: '/nosotros' },
+      { label: 'Reseñas', to: '/resenas' },
+      { label: 'Mi cuenta', to: '/cuenta' },
     ],
   },
   {
     title: 'Ayuda',
     links: [
-      { label: 'Centro de soporte', to: '/catalogo' },
-      { label: 'Envíos y entregas', to: '/catalogo' },
-      { label: 'Devoluciones', to: '/catalogo' },
-      { label: 'Garantía', to: '/catalogo' },
+      { label: 'Envíos y entregas', to: '/nosotros' },
+      { label: 'Cambios y devoluciones', to: '/nosotros' },
+      { label: 'Contáctanos', to: '/nosotros' },
     ],
   },
 ];
@@ -44,7 +42,7 @@ export function Footer() {
       <div className="container grid grid-cols-2 gap-8 py-14 md:grid-cols-5">
         <div className="col-span-2">
           <Link to="/" className="flex items-center gap-2 text-lg font-semibold">
-            <span className="grid h-7 w-7 place-items-center rounded-lg bg-brand-600 text-white">V</span>
+            <span className="grid h-7 w-7 place-items-center rounded-lg brand-gradient text-neutral-950">V</span>
             VÉRTICE
           </Link>
           <p className="mt-3 max-w-xs text-sm text-muted-foreground">

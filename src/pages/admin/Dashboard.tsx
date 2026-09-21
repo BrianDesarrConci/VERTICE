@@ -18,7 +18,7 @@ import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { formatCompact, formatCurrency, formatDateTime } from '@/lib/format';
 
-const CHART_COLORS = ['#0071e3', '#34c759', '#ff9500', '#af52de', '#ff2d55', '#5ac8fa'];
+const CHART_COLORS = ['#7DD100', '#34c759', '#ff9500', '#af52de', '#ff2d55', '#5ac8fa'];
 
 export function Dashboard() {
   const { data: stats, loading } = useAsync(() => api.getDashboard(), []);
@@ -82,8 +82,8 @@ export function Dashboard() {
               <AreaChart data={stats.salesByDay} margin={{ left: -10, right: 10, top: 10 }}>
                 <defs>
                   <linearGradient id="salesGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#0071e3" stopOpacity={0.35} />
-                    <stop offset="100%" stopColor="#0071e3" stopOpacity={0} />
+                    <stop offset="0%" stopColor="#7DD100" stopOpacity={0.35} />
+                    <stop offset="100%" stopColor="#7DD100" stopOpacity={0} />
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" vertical={false} />
@@ -93,7 +93,7 @@ export function Dashboard() {
                   formatter={(v: number) => [formatCurrency(v), 'Ventas']}
                   contentStyle={{ borderRadius: 12, border: '1px solid hsl(var(--border))', background: 'hsl(var(--card))', color: 'hsl(var(--foreground))' }}
                 />
-                <Area type="monotone" dataKey="total" stroke="#0071e3" strokeWidth={2.5} fill="url(#salesGrad)" />
+                <Area type="monotone" dataKey="total" stroke="#7DD100" strokeWidth={2.5} fill="url(#salesGrad)" />
               </AreaChart>
             </ResponsiveContainer>
           </div>

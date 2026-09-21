@@ -3,11 +3,13 @@ import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom';
 import {
   BarChart3,
   Boxes,
+  Image,
   LayoutDashboard,
   LogOut,
   Menu,
   Settings,
   ShoppingCart,
+  Ticket,
   Truck,
   Users,
 } from 'lucide-react';
@@ -18,9 +20,11 @@ import { cn } from '@/lib/utils';
 
 const NAV = [
   { to: '/admin', label: 'Dashboard', icon: LayoutDashboard, end: true },
-  { to: '/admin/stock', label: 'Stock', icon: Boxes },
+  { to: '/admin/stock', label: 'Productos', icon: Boxes },
   { to: '/admin/ventas', label: 'Ventas', icon: ShoppingCart },
   { to: '/admin/despachos', label: 'Despachos', icon: Truck },
+  { to: '/admin/cupones', label: 'Cupones', icon: Ticket },
+  { to: '/admin/contenido', label: 'Contenido', icon: Image },
   { to: '/admin/clientes', label: 'Clientes', icon: Users },
   { to: '/admin/analytics', label: 'Analytics', icon: BarChart3 },
   { to: '/admin/configuracion', label: 'Configuración', icon: Settings },
