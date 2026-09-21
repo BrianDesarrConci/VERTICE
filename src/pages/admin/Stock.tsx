@@ -1,8 +1,10 @@
 import * as React from 'react';
 import { motion } from 'framer-motion';
 import { Download, Pencil, Plus, Search, Trash2, TrendingDown, TrendingUp, X } from 'lucide-react';
-import type { Product } from '@/lib/types';
+import type { Department, Product, ProductVariant } from '@/lib/types';
+import { DEPARTMENTS } from '@/lib/types';
 import { api } from '@/lib/api';
+import { shortId } from '@/lib/utils';
 import { useAsync } from '@/hooks/useAsync';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -19,10 +21,12 @@ const emptyProduct = (): Product => ({
   slug: '',
   description: '',
   price: 0,
+  compareAtPrice: 0,
   cost: 0,
   stock: 0,
-  category: 'accesorios',
-  brand: 'Apple',
+  department: 'unisex',
+  category: 'camisetas',
+  brand: 'VÉRTICE',
   images: [],
   variants: [],
   rating: 0,
@@ -241,13 +245,29 @@ function ProductModal({ product, onClose, onSaved }: { product: Product; onClose
   const [saving, setSaving] = React.useState(false);
   const set = <K extends keyof Product>(k: K, v: Product[K]) => setForm((f) => ({ ...f, [k]: v }));
 
+  // --- Editor de tallas / variantes ---
+  const setVariant = (id: string, patch: Partial<ProductVariant>) =>
+    setForm((f) => ({ ...f, variants: f.variants.map((v) => (v.id === id ? { ...v, ...patch } : v)) }));
+  const addVariant = () =>
+    setForm((f) => ({ ...f, variants: [...f.variants, { id: shortId('v'), name: 'Talla', priceDelta: 0, stock: 0 }] }));
+  const removeVariant = (id: string) =>
+    setForm((f) => ({ ...f, variants: f.variants.filter((v) => v.id !== id) }));
+  const addStandardSizes = () =>
+    setForm((f) => ({
+      ...f,
+      variants: ['S', 'M', 'L', 'XL'].map((s) => ({ id: shortId('v'), name: `Talla ${s}`, priceDelta: 0, stock: 0 })),
+    }));
+
   const save = async () => {
     setSaving(true);
     try {
+      // Si hay variantes con stock, el stock total del producto es su suma.
+      const variantStock = form.variants.reduce((s, v) => s + (Number(v.stock) || 0), 0);
       const payload: Product = {
         ...form,
         slug: form.slug || slugify(form.name),
-        images: form.images.length ? form.images : ['https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=1200&q=80'],
+        stock: form.variants.length ? variantStock : form.stock,
+        images: form.images.length ? form.images.filter(Boolean) : ['https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=1200&q=80'],
       };
       await api.saveProduct(payload);
       onSaved();
@@ -265,21 +285,39 @@ function ProductModal({ product, onClose, onSaved }: { product: Product; onClose
         <Input label="SKU" value={form.sku} onChange={(e) => set('sku', e.target.value)} />
         <Input label="Marca" value={form.brand} onChange={(e) => set('brand', e.target.value)} />
         <div>
+          <label className="mb-1.5 block text-sm font-medium">Departamento</label>
+          <select
+            value={form.department}
+            onChange={(e) => set('department', e.target.value as Department)}
+            className="h-11 w-full rounded-xl border border-input bg-background px-4 text-[15px] focus:outline-none focus:ring-2 focus:ring-ring/50"
+          >
+            {[...DEPARTMENTS, { slug: 'unisex' as Department, label: 'Unisex' }].map((d) => (
+              <option key={d.slug} value={d.slug}>{d.label}</option>
+            ))}
+          </select>
+        </div>
+        <div>
           <label className="mb-1.5 block text-sm font-medium">Categoría</label>
           <select
             value={form.category}
             onChange={(e) => set('category', e.target.value)}
             className="h-11 w-full rounded-xl border border-input bg-background px-4 text-[15px] focus:outline-none focus:ring-2 focus:ring-ring/50"
           >
-            {['camisetas', 'hoodies', 'libretas', 'totebags', 'gorras', 'accesorios'].map((c) => (
+            {['camisetas', 'hoodies', 'gorras', 'libretas', 'totebags', 'accesorios'].map((c) => (
               <option key={c} value={c}>{c}</option>
             ))}
           </select>
         </div>
-        <Input label="URL de imagen" value={form.images[0] ?? ''} onChange={(e) => set('images', [e.target.value])} placeholder="https://..." />
+        <div className="sm:col-span-2">
+          <Input label="URL de imagen principal" value={form.images[0] ?? ''} onChange={(e) => set('images', [e.target.value, ...(form.images.slice(1))])} placeholder="https://... o /productos/foto.jpg" />
+        </div>
+        <div className="sm:col-span-2">
+          <Input label="URL de imagen secundaria (hover)" value={form.images[1] ?? ''} onChange={(e) => set('images', [form.images[0] ?? '', e.target.value])} placeholder="Opcional" />
+        </div>
         <Input label="Precio" type="number" value={form.price} onChange={(e) => set('price', Number(e.target.value))} />
+        <Input label="Precio antes (oferta)" type="number" value={form.compareAtPrice ?? 0} onChange={(e) => set('compareAtPrice', Number(e.target.value))} />
         <Input label="Costo" type="number" value={form.cost} onChange={(e) => set('cost', Number(e.target.value))} />
-        <Input label="Stock" type="number" value={form.stock} onChange={(e) => set('stock', Number(e.target.value))} />
+        <Input label="Stock (si no usas tallas)" type="number" value={form.stock} onChange={(e) => set('stock', Number(e.target.value))} disabled={form.variants.length > 0} />
         <div className="sm:col-span-2">
           <label className="mb-1.5 block text-sm font-medium">Descripción</label>
           <textarea
@@ -289,18 +327,44 @@ function ProductModal({ product, onClose, onSaved }: { product: Product; onClose
             className="w-full rounded-xl border border-input bg-background px-4 py-3 text-[15px] focus:outline-none focus:ring-2 focus:ring-ring/50"
           />
         </div>
-        <div className="flex items-center gap-6 sm:col-span-2">
+
+        {/* Editor de tallas / variantes */}
+        <div className="sm:col-span-2">
+          <div className="mb-2 flex items-center justify-between">
+            <label className="text-sm font-medium">Tallas / variantes</label>
+            <div className="flex gap-2">
+              <Button type="button" variant="ghost" size="sm" onClick={addStandardSizes}>S · M · L · XL</Button>
+              <Button type="button" variant="outline" size="sm" onClick={addVariant}><Plus className="h-4 w-4" /> Añadir</Button>
+            </div>
+          </div>
+          {form.variants.length === 0 ? (
+            <p className="rounded-xl border border-dashed border-border p-3 text-center text-sm text-muted-foreground">
+              Sin variantes. Usa el stock general de arriba, o añade tallas.
+            </p>
+          ) : (
+            <div className="space-y-2">
+              {form.variants.map((v) => (
+                <div key={v.id} className="flex items-center gap-2">
+                  <input value={v.name} onChange={(e) => setVariant(v.id, { name: e.target.value })} placeholder="Nombre (ej: Talla M)" className="h-10 flex-1 rounded-lg border border-input bg-background px-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring/50" />
+                  <input type="number" value={v.priceDelta} onChange={(e) => setVariant(v.id, { priceDelta: Number(e.target.value) })} placeholder="+$" title="Diferencia de precio" className="h-10 w-20 rounded-lg border border-input bg-background px-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring/50" />
+                  <input type="number" value={v.stock} onChange={(e) => setVariant(v.id, { stock: Number(e.target.value) })} placeholder="Stock" title="Stock" className="h-10 w-20 rounded-lg border border-input bg-background px-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring/50" />
+                  <button onClick={() => removeVariant(v.id)} aria-label="Quitar" className="grid h-10 w-10 flex-shrink-0 place-items-center rounded-lg text-muted-foreground hover:bg-muted hover:text-red-600"><X className="h-4 w-4" /></button>
+                </div>
+              ))}
+              <p className="text-xs text-muted-foreground">Stock total (suma de tallas): {form.variants.reduce((s, v) => s + (Number(v.stock) || 0), 0)}</p>
+            </div>
+          )}
+        </div>
+
+        <div className="flex flex-wrap items-center gap-6 sm:col-span-2">
           <label className="flex items-center gap-2 text-sm">
-            <input type="checkbox" checked={form.active} onChange={(e) => set('active', e.target.checked)} className="h-4 w-4 rounded accent-brand-600" />
-            Activo
+            <input type="checkbox" checked={form.active} onChange={(e) => set('active', e.target.checked)} className="h-4 w-4 rounded accent-brand-500" /> Activo
           </label>
           <label className="flex items-center gap-2 text-sm">
-            <input type="checkbox" checked={form.featured} onChange={(e) => set('featured', e.target.checked)} className="h-4 w-4 rounded accent-brand-600" />
-            Destacado
+            <input type="checkbox" checked={form.featured} onChange={(e) => set('featured', e.target.checked)} className="h-4 w-4 rounded accent-brand-500" /> Destacado
           </label>
           <label className="flex items-center gap-2 text-sm">
-            <input type="checkbox" checked={form.isNew} onChange={(e) => set('isNew', e.target.checked)} className="h-4 w-4 rounded accent-brand-600" />
-            Nuevo
+            <input type="checkbox" checked={form.isNew} onChange={(e) => set('isNew', e.target.checked)} className="h-4 w-4 rounded accent-brand-500" /> Nuevo
           </label>
         </div>
       </div>

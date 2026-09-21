@@ -5,10 +5,19 @@
 
 export type ID = string;
 
-/** Variante de un producto (color, capacidad, etc.). */
+/** Departamento (división por público). */
+export type Department = 'dama' | 'caballero' | 'nino' | 'unisex';
+
+export const DEPARTMENTS: { slug: Department; label: string }[] = [
+  { slug: 'dama', label: 'Dama' },
+  { slug: 'caballero', label: 'Caballero' },
+  { slug: 'nino', label: 'Niño' },
+];
+
+/** Variante de un producto (talla, color, etc.). */
 export interface ProductVariant {
   id: ID;
-  name: string; // ej: "256 GB — Titanio Natural"
+  name: string; // ej: "Talla M" o "Rojo / M"
   priceDelta: number; // diferencia sobre el precio base (puede ser 0 o negativa)
   stock: number;
   sku?: string;
@@ -21,9 +30,11 @@ export interface Product {
   slug: string;
   description: string;
   price: number; // precio base en la moneda de la tienda
+  compareAtPrice?: number; // precio "antes" para mostrar descuento (0/undefined = sin descuento)
   cost: number; // costo (solo admin)
   stock: number;
-  category: string; // slug de categoría
+  department: Department; // dama | caballero | nino | unisex
+  category: string; // slug de categoría (tipo de prenda)
   brand: string;
   images: string[];
   variants: ProductVariant[];
@@ -33,6 +44,42 @@ export interface Product {
   isNew: boolean;
   active: boolean;
   createdAt: string; // ISO
+}
+
+/** Cupón de descuento gestionable desde el admin. */
+export interface Coupon {
+  code: string;
+  type: 'percent' | 'fixed';
+  value: number; // % (0..100) o monto fijo
+  active: boolean;
+  minPurchase?: number; // compra mínima para aplicar
+  description?: string;
+}
+
+/** Reseña de cliente. */
+export interface Review {
+  id: ID;
+  name: string;
+  rating: number; // 1..5
+  text: string;
+  product?: string;
+  date: string; // ISO
+  avatar?: string;
+}
+
+/** Contenido editable del sitio (CMS ligero, hoja Configuracion). */
+export interface SiteContent {
+  heroEyebrow: string;
+  heroTitle: string;
+  heroHighlight: string;
+  heroSubtitle: string;
+  heroImage: string;
+  announcement: string; // barra superior deslizante
+  promoTitle: string;
+  promoText: string;
+  aboutTitle: string;
+  aboutText: string;
+  aboutImage: string;
 }
 
 export interface Category {

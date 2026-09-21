@@ -9,6 +9,8 @@ import { Catalog } from '@/pages/store/Catalog';
 import { Product } from '@/pages/store/Product';
 import { Checkout } from '@/pages/store/Checkout';
 import { Account } from '@/pages/store/Account';
+import { Reviews } from '@/pages/store/Reviews';
+import { About } from '@/pages/store/About';
 
 // --- Panel admin ---
 import { AdminLogin } from '@/pages/admin/Login';
@@ -18,6 +20,8 @@ import { Orders } from '@/pages/admin/Orders';
 import { Shipments } from '@/pages/admin/Shipments';
 import { Customers } from '@/pages/admin/Customers';
 import { Analytics } from '@/pages/admin/Analytics';
+import { Coupons } from '@/pages/admin/Coupons';
+import { Content } from '@/pages/admin/Content';
 import { Settings } from '@/pages/admin/Settings';
 
 import { NotFound } from '@/pages/NotFound';
@@ -30,9 +34,12 @@ export default function App() {
         <Route path="/" element={<Home />} />
         <Route path="/catalogo" element={<Catalog />} />
         <Route path="/catalogo/:category" element={<Catalog />} />
+        <Route path="/categorias/:department" element={<Catalog />} />
         <Route path="/producto/:slug" element={<Product />} />
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/cuenta" element={<Account />} />
+        <Route path="/resenas" element={<Reviews />} />
+        <Route path="/nosotros" element={<About />} />
       </Route>
 
       {/* ===== Admin ===== */}
@@ -49,6 +56,8 @@ export default function App() {
         <Route path="stock" element={<Stock />} />
         <Route path="ventas" element={<Orders />} />
         <Route path="despachos" element={<Shipments />} />
+        <Route path="cupones" element={<Coupons />} />
+        <Route path="contenido" element={<Content />} />
         <Route path="clientes" element={<Customers />} />
         <Route path="analytics" element={<Analytics />} />
         <Route path="configuracion" element={<Settings />} />

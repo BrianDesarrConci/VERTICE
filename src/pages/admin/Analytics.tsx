@@ -19,7 +19,7 @@ import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { formatCompact, formatCurrency } from '@/lib/format';
 
-const COLORS = ['#0071e3', '#34c759', '#ff9500', '#af52de', '#ff2d55', '#5ac8fa'];
+const COLORS = ['#7DD100', '#34c759', '#ff9500', '#af52de', '#ff2d55', '#5ac8fa'];
 
 export function Analytics() {
   const { data: stats, loading } = useAsync(() => api.getDashboard(), []);
@@ -78,7 +78,7 @@ export function Analytics() {
                 <XAxis dataKey="date" tick={{ fontSize: 12, fill: 'hsl(var(--muted-foreground))' }} axisLine={false} tickLine={false} />
                 <YAxis tickFormatter={(v) => formatCompact(v)} tick={{ fontSize: 12, fill: 'hsl(var(--muted-foreground))' }} axisLine={false} tickLine={false} width={48} />
                 <Tooltip formatter={(v: number) => [formatCurrency(v), 'Ventas']} contentStyle={{ borderRadius: 12, border: '1px solid hsl(var(--border))', background: 'hsl(var(--card))' }} />
-                <Bar dataKey="total" fill="#0071e3" radius={[6, 6, 0, 0]} />
+                <Bar dataKey="total" fill="#7DD100" radius={[6, 6, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>

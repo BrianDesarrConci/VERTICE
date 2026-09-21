@@ -5,10 +5,10 @@ type Variant = 'primary' | 'secondary' | 'ghost' | 'outline' | 'danger';
 type Size = 'sm' | 'md' | 'lg' | 'icon';
 
 const variants: Record<Variant, string> = {
-  // Botón pill principal — acento marca, con estados hover/active/focus perfectos.
+  // Botón pill principal — verde lima con texto oscuro (contraste AA + energía).
   primary:
-    'bg-brand-600 text-white hover:bg-brand-700 active:bg-brand-800 shadow-sm hover:shadow-md',
-  secondary: 'bg-foreground text-background hover:opacity-90 active:opacity-80',
+    'bg-brand-500 text-neutral-950 hover:bg-brand-400 active:bg-brand-600 shadow-sm hover:shadow-glow',
+  secondary: 'bg-neutral-950 text-white hover:bg-neutral-800 active:bg-black dark:bg-white dark:text-neutral-950',
   ghost: 'bg-transparent hover:bg-muted text-foreground',
   outline: 'border border-border bg-transparent hover:bg-muted text-foreground',
   danger: 'bg-red-600 text-white hover:bg-red-700 active:bg-red-800',
