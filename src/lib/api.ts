@@ -40,11 +40,16 @@ import {
 } from './mockData';
 import { shortId, sleep } from './utils';
 
-const GAS_URL = import.meta.env.VITE_GAS_URL as string | undefined;
-const ADMIN_TOKEN = (import.meta.env.VITE_ADMIN_TOKEN as string | undefined) ?? '';
+// URL del Web App de Google Apps Script (backend real). Se puede sobreescribir
+// con la variable de entorno VITE_GAS_URL; si no, usa esta por defecto.
+const DEFAULT_GAS_URL =
+  'https://script.google.com/macros/s/AKfycbyJPNONWQP5sSsTX6Gmxk3FOaocK90_CloLp2taIO_feaZNdVug91Bvt3BkfwFgOIsV/exec';
+
+const GAS_URL = (import.meta.env.VITE_GAS_URL as string | undefined) || DEFAULT_GAS_URL;
+const ADMIN_TOKEN = (import.meta.env.VITE_ADMIN_TOKEN as string | undefined) || 'vertice-dev-token';
 const FORCE_MOCK = (import.meta.env.VITE_USE_MOCK as string | undefined) === 'true';
 
-/** Usa mock si se fuerza por env o si no hay URL de backend configurada. */
+/** Usa mock SOLO si se fuerza por env. Por defecto: backend real. */
 export const USING_MOCK = FORCE_MOCK || !GAS_URL;
 
 class ApiError extends Error {

@@ -4,6 +4,7 @@ import { Heart, MapPin, Package, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
+import { api } from '@/lib/api';
 import { MOCK_ORDERS } from '@/lib/mockData';
 import { formatCurrency, formatDate } from '@/lib/format';
 import { cn } from '@/lib/utils';
@@ -54,7 +55,7 @@ export function Account() {
 
         {/* Contenido */}
         <div className="flex-1">
-          {tab === 'orders' && (
+          {tab === 'orders' && (api.usingMock ? (
             <div className="space-y-4">
               {MOCK_ORDERS.slice(0, 3).map((o) => {
                 const st = STATUS_LABEL[o.status];
@@ -85,7 +86,14 @@ export function Account() {
                 );
               })}
             </div>
-          )}
+          ) : (
+            <div className="grid place-items-center rounded-2xl border border-dashed border-border py-20 text-center">
+              <Package className="h-10 w-10 text-muted-foreground/40" />
+              <p className="mt-4 font-semibold">Aún no tienes pedidos</p>
+              <p className="mt-1 text-sm text-muted-foreground">Cuando hagas tu primera compra, aparecerá aquí.</p>
+              <Link to="/catalogo" className="mt-4"><Button variant="outline" size="sm">Ir a la tienda</Button></Link>
+            </div>
+          ))}
 
           {tab === 'addresses' && (
             <div className="grid gap-4 sm:grid-cols-2">
