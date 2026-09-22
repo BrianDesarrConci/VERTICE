@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { Link } from 'react-router-dom';
-import { Heart, MapPin, Package, User } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Heart, MapPin, Package, ShieldCheck, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
@@ -97,13 +97,15 @@ export function Account() {
 
           {tab === 'addresses' && (
             <div className="grid gap-4 sm:grid-cols-2">
-              <div className="rounded-2xl border border-border bg-card p-5">
-                <div className="flex items-center gap-2">
-                  <Badge tone="brand">Principal</Badge>
+              {api.usingMock && (
+                <div className="rounded-2xl border border-border bg-card p-5">
+                  <div className="flex items-center gap-2">
+                    <Badge tone="brand">Principal</Badge>
+                  </div>
+                  <p className="mt-3 font-medium">Casa</p>
+                  <p className="mt-1 text-sm text-muted-foreground">Cra 43A #7-50, Apto 302<br />Medellín, Antioquia</p>
                 </div>
-                <p className="mt-3 font-medium">Casa</p>
-                <p className="mt-1 text-sm text-muted-foreground">Cra 43A #7-50, Apto 302<br />Medellín, Antioquia</p>
-              </div>
+              )}
               <button className="grid place-items-center rounded-2xl border border-dashed border-border p-5 text-sm text-muted-foreground transition-colors hover:bg-muted">
                 + Agregar dirección
               </button>
@@ -153,43 +155,58 @@ function TabButton({
 
 function ClientAuth({ onLogin }: { onLogin: () => void }) {
   const [mode, setMode] = React.useState<'login' | 'register'>('login');
+  const [email, setEmail] = React.useState('');
+  const navigate = useNavigate();
+
+  // Si alguien intenta entrar con un correo de administrador, lo enviamos al panel.
+  const looksAdmin = /admin@|@vertice\.co/i.test(email);
+
+  const submit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (looksAdmin) {
+      navigate('/admin/login');
+      return;
+    }
+    onLogin();
+  };
+
   return (
     <div className="container grid place-items-center py-20">
       <div className="w-full max-w-md rounded-3xl border border-border bg-card p-8">
-        <div className="mx-auto grid h-14 w-14 place-items-center rounded-2xl bg-brand-600/10 text-brand-600">
+        <div className="mx-auto grid h-14 w-14 place-items-center rounded-2xl bg-brand-500/15 text-brand-700 dark:text-brand-400">
           <User className="h-7 w-7" />
         </div>
         <h1 className="mt-5 text-center text-2xl font-semibold tracking-tight">
           {mode === 'login' ? 'Inicia sesión' : 'Crea tu cuenta'}
         </h1>
         <p className="mt-1 text-center text-sm text-muted-foreground">
-          {mode === 'login' ? 'Accede a tus pedidos y datos.' : 'Compra más rápido y sigue tus envíos.'}
+          {mode === 'login' ? 'Área de clientes de la tienda.' : 'Compra más rápido y sigue tus envíos.'}
         </p>
 
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            onLogin();
-          }}
-          className="mt-6 space-y-4"
-        >
+        <form onSubmit={submit} className="mt-6 space-y-4">
           {mode === 'register' && <Input label="Nombre" placeholder="Tu nombre" required />}
-          <Input label="Correo" type="email" placeholder="tu@correo.com" required />
+          <Input label="Correo" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="tu@correo.com" required />
           <Input label="Contraseña" type="password" placeholder="••••••••" required />
+          {looksAdmin && (
+            <p className="rounded-lg bg-brand-500/10 px-3 py-2 text-xs text-brand-700 dark:text-brand-400">
+              Ese parece un correo de administrador. Te llevaremos al panel de administración.
+            </p>
+          )}
           <Button type="submit" className="w-full" size="lg">
-            {mode === 'login' ? 'Ingresar' : 'Registrarme'}
+            {looksAdmin ? 'Ir al panel admin' : mode === 'login' ? 'Ingresar' : 'Registrarme'}
           </Button>
         </form>
 
         <p className="mt-5 text-center text-sm text-muted-foreground">
           {mode === 'login' ? '¿No tienes cuenta?' : '¿Ya tienes cuenta?'}{' '}
-          <button
-            onClick={() => setMode(mode === 'login' ? 'register' : 'login')}
-            className="font-medium text-brand-600 hover:underline"
-          >
+          <button onClick={() => setMode(mode === 'login' ? 'register' : 'login')} className="font-medium text-brand-700 hover:underline dark:text-brand-400">
             {mode === 'login' ? 'Regístrate' : 'Inicia sesión'}
           </button>
         </p>
+
+        <Link to="/admin/login" className="mt-4 flex items-center justify-center gap-1.5 text-xs text-muted-foreground hover:text-foreground">
+          <ShieldCheck className="h-3.5 w-3.5" /> Acceso administradores
+        </Link>
       </div>
     </div>
   );
