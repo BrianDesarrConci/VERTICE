@@ -5,19 +5,21 @@ type Variant = 'primary' | 'secondary' | 'ghost' | 'outline' | 'danger';
 type Size = 'sm' | 'md' | 'lg' | 'icon';
 
 const variants: Record<Variant, string> = {
-  // Botón pill principal — verde lima con texto oscuro (contraste AA + energía).
+  // Principal — verde lima con relieve y elevación al hover.
   primary:
-    'bg-brand-500 text-neutral-950 hover:bg-brand-400 active:bg-brand-600 shadow-sm hover:shadow-glow',
-  secondary: 'bg-neutral-950 text-white hover:bg-neutral-800 active:bg-black dark:bg-white dark:text-neutral-950',
+    'bg-brand-500 text-neutral-950 shadow-btn-brand hover:bg-brand-400 hover:shadow-btn-brand-hover hover:-translate-y-0.5 active:translate-y-0 active:bg-brand-600',
+  // Secundario — negro/blanco con sombra sutil.
+  secondary:
+    'bg-neutral-900 text-white shadow-btn hover:bg-neutral-800 hover:-translate-y-0.5 active:translate-y-0 dark:bg-white dark:text-neutral-950 dark:hover:bg-white/90',
   ghost: 'bg-transparent hover:bg-muted text-foreground',
-  outline: 'border border-border bg-transparent hover:bg-muted text-foreground',
-  danger: 'bg-red-600 text-white hover:bg-red-700 active:bg-red-800',
+  outline: 'border border-border bg-card/60 text-foreground shadow-sm hover:bg-muted hover:-translate-y-0.5 active:translate-y-0',
+  danger: 'bg-red-600 text-white shadow-btn hover:bg-red-700 hover:-translate-y-0.5 active:translate-y-0',
 };
 
 const sizes: Record<Size, string> = {
   sm: 'h-9 px-4 text-sm',
   md: 'h-11 px-6 text-[15px]',
-  lg: 'h-13 px-8 text-base',
+  lg: 'h-[3.25rem] px-8 text-base',
   icon: 'h-10 w-10',
 };
 

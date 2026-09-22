@@ -9,13 +9,14 @@ interface BlobSpec {
   dur: number; // duración de la flotación (s)
 }
 
-// Paleta de marca para las manchas de color (verde lima + acentos).
+// Manchas de color que siguen las variables de marca (cambian con el tema).
+const g = (v: string) => `radial-gradient(circle at 30% 30%, rgb(var(${v})), rgb(var(${v}) / 0) 70%)`;
 const BLOBS: BlobSpec[] = [
-  { top: '-8%', left: '-6%', size: 620, gradient: 'radial-gradient(circle at 30% 30%, #7DD100, rgba(125,209,0,0) 70%)', speed: 0.12, dur: 20 },
-  { top: '10%', left: '62%', size: 560, gradient: 'radial-gradient(circle at 30% 30%, #BEEE00, rgba(190,238,0,0) 70%)', speed: -0.08, dur: 24 },
-  { top: '45%', left: '20%', size: 480, gradient: 'radial-gradient(circle at 30% 30%, #37d67a, rgba(55,214,122,0) 70%)', speed: 0.06, dur: 18 },
-  { top: '68%', left: '72%', size: 600, gradient: 'radial-gradient(circle at 30% 30%, #7DD100, rgba(125,209,0,0) 70%)', speed: -0.14, dur: 26 },
-  { top: '82%', left: '8%', size: 440, gradient: 'radial-gradient(circle at 30% 30%, #a3de26, rgba(163,222,38,0) 70%)', speed: 0.1, dur: 22 },
+  { top: '-8%', left: '-6%', size: 620, gradient: g('--brand-500'), speed: 0.12, dur: 20 },
+  { top: '10%', left: '62%', size: 560, gradient: g('--brand2'), speed: -0.08, dur: 24 },
+  { top: '45%', left: '20%', size: 480, gradient: g('--brand-400'), speed: 0.06, dur: 18 },
+  { top: '68%', left: '72%', size: 600, gradient: g('--brand-500'), speed: -0.14, dur: 26 },
+  { top: '82%', left: '8%', size: 440, gradient: g('--brand-300'), speed: 0.1, dur: 22 },
 ];
 
 /**

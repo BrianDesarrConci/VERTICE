@@ -5,6 +5,7 @@ import { ChevronDown, Menu, Search, ShoppingBag, User, X } from 'lucide-react';
 import { useCartStore } from '@/stores/cartStore';
 import { useUIStore } from '@/stores/uiStore';
 import { useSiteContent } from '@/hooks/useSiteContent';
+import { useStoreConfig } from '@/hooks/useStoreConfig';
 import { ThemeToggle } from '@/components/theme/ThemeToggle';
 import { cn } from '@/lib/utils';
 import { DEPARTMENTS } from '@/lib/types';
@@ -27,6 +28,7 @@ export function Header() {
   const count = useCartStore((s) => s.count());
   const openCart = useUIStore((s) => s.openCart);
   const content = useSiteContent();
+  const config = useStoreConfig();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -91,10 +93,18 @@ export function Header() {
         onMouseLeave={scheduleClose}
       >
         <div className={cn('container flex items-center justify-between gap-4 transition-all', scrolled ? 'h-14' : 'h-16')}>
-          {/* Logo */}
-          <Link to="/" className="flex items-center gap-2 text-lg font-extrabold tracking-tight">
-            <span className="grid h-8 w-8 place-items-center rounded-xl brand-gradient text-neutral-950">V</span>
-            VÉRTICE
+          {/* Logo (dinámico: imagen si el admin subió logo, si no logotipo por texto) */}
+          <Link to="/" className="flex items-center gap-2 font-display text-lg font-extrabold tracking-tight">
+            {config.logoUrl ? (
+              <img src={config.logoUrl} alt={config.storeName} className="h-8 w-auto max-w-[160px] object-contain" />
+            ) : (
+              <>
+                <span className="grid h-8 w-8 place-items-center rounded-xl brand-gradient text-neutral-950">
+                  {config.storeName.charAt(0)}
+                </span>
+                {config.storeName}
+              </>
+            )}
           </Link>
 
           {/* Nav desktop */}
@@ -168,7 +178,7 @@ export function Header() {
               transition={{ duration: 0.2 }}
               onMouseEnter={openMega}
               onMouseLeave={scheduleClose}
-              className="absolute inset-x-0 top-full hidden border-b border-border glass-panel md:block"
+              className="absolute inset-x-0 top-full hidden border-b border-border bg-card shadow-lift md:block"
             >
               <div className="container grid grid-cols-4 gap-6 py-8">
                 {DEPARTMENTS.map((dep) => (

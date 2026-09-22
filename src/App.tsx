@@ -1,4 +1,5 @@
 import { Routes, Route } from 'react-router-dom';
+import { BrandTheme } from '@/components/BrandTheme';
 import { StoreLayout } from '@/components/layout/StoreLayout';
 import { AdminLayout } from '@/components/admin/AdminLayout';
 import { ProtectedRoute } from '@/components/admin/ProtectedRoute';
@@ -21,7 +22,7 @@ import { Shipments } from '@/pages/admin/Shipments';
 import { Customers } from '@/pages/admin/Customers';
 import { Analytics } from '@/pages/admin/Analytics';
 import { Coupons } from '@/pages/admin/Coupons';
-import { Content } from '@/pages/admin/Content';
+import { Appearance } from '@/pages/admin/Appearance';
 import { Diagnostics } from '@/pages/admin/Diagnostics';
 import { Settings } from '@/pages/admin/Settings';
 
@@ -29,6 +30,8 @@ import { NotFound } from '@/pages/NotFound';
 
 export default function App() {
   return (
+    <>
+    <BrandTheme />
     <Routes>
       {/* ===== Tienda pública ===== */}
       <Route element={<StoreLayout />}>
@@ -58,7 +61,9 @@ export default function App() {
         <Route path="ventas" element={<Orders />} />
         <Route path="despachos" element={<Shipments />} />
         <Route path="cupones" element={<Coupons />} />
-        <Route path="contenido" element={<Content />} />
+        <Route path="personalizacion" element={<Appearance />} />
+        {/* alias antiguo */}
+        <Route path="contenido" element={<Appearance />} />
         <Route path="clientes" element={<Customers />} />
         <Route path="analytics" element={<Analytics />} />
         <Route path="diagnostico" element={<Diagnostics />} />
@@ -68,5 +73,6 @@ export default function App() {
       {/* ===== 404 ===== */}
       <Route path="*" element={<NotFound />} />
     </Routes>
+    </>
   );
 }

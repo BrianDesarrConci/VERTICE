@@ -26,6 +26,9 @@ export const MOCK_CONFIG: StoreConfig = {
   freeShippingThreshold: 200000,
   flatShipping: 12000,
   storeName: 'VÉRTICE',
+  primaryColor: '#7DD100',
+  secondaryColor: '#BEEE00',
+  logoUrl: '',
 };
 
 // Categorías = tipo de prenda (transversal a los departamentos).

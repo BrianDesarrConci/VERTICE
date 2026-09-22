@@ -18,6 +18,20 @@
     --input: 150 12% 86%;
     --ring: 84 100% 38%;
     --radius: 1rem;
+
+    /* Escala de marca por defecto (#7DD100 / #BEEE00) en canales RGB.
+       El admin la sobreescribe en caliente vía applyBrandTheme(). */
+    --brand-50: 244 252 225;
+    --brand-100: 230 249 189;
+    --brand-200: 211 243 138;
+    --brand-300: 189 234 84;
+    --brand-400: 163 222 38;
+    --brand-500: 125 209 0;
+    --brand-600: 107 184 0;
+    --brand-700: 82 142 0;
+    --brand-800: 64 110 7;
+    --brand-900: 55 92 12;
+    --brand2: 190 238 0;
   }
 
   .dark {
@@ -80,15 +94,15 @@
   }
 
   .section-title {
-    @apply text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl;
+    @apply font-display text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl;
   }
 
-  /* Degradado de marca reutilizable */
+  /* Degradado de marca reutilizable (usa variables → cambia con el tema) */
   .brand-gradient {
-    background-image: linear-gradient(120deg, #7dd100 0%, #beee00 100%);
+    background-image: linear-gradient(120deg, rgb(var(--brand-500)) 0%, rgb(var(--brand2)) 100%);
   }
   .brand-text {
-    background-image: linear-gradient(120deg, #6bb800 0%, #7dd100 55%, #a3de26 100%);
+    background-image: linear-gradient(120deg, rgb(var(--brand-600)) 0%, rgb(var(--brand-400)) 55%, rgb(var(--brand2)) 100%);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;

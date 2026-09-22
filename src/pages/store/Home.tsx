@@ -44,7 +44,7 @@ export function Home() {
                 <span className="inline-flex items-center gap-2 rounded-full glass px-4 py-1.5 text-sm font-semibold">
                   <Sparkles className="h-4 w-4 text-brand-400" /> {content.heroEyebrow}
                 </span>
-                <h1 className="mt-4 text-5xl font-extrabold leading-[1.02] tracking-tight sm:text-6xl md:text-7xl">
+                <h1 className="mt-4 font-display text-5xl font-extrabold leading-[1.02] tracking-tight sm:text-6xl md:text-7xl">
                   {content.heroTitle}{' '}
                   <span className="brand-text">{content.heroHighlight}</span>
                 </h1>
