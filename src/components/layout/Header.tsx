@@ -74,15 +74,17 @@ export function Header() {
   return (
     <header className="sticky top-0 z-50 w-full">
       {/* Barra de anuncios (marquee) */}
-      <div className="brand-gradient overflow-hidden text-neutral-950">
-        <div className="flex whitespace-nowrap py-1.5 text-xs font-semibold">
-          <div className="flex animate-marquee gap-12 pr-12">
-            {[0, 1].map((k) => (
-              <span key={k}>{content.announcement}</span>
-            ))}
+      {content.showAnnouncement && content.announcement && (
+        <div className="brand-gradient overflow-hidden text-neutral-950">
+          <div className="flex whitespace-nowrap py-1.5 text-xs font-semibold">
+            <div className="flex animate-marquee gap-12 pr-12">
+              {[0, 1].map((k) => (
+                <span key={k}>{content.announcement}</span>
+              ))}
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
       {/* Barra principal */}
       <div
@@ -134,18 +136,20 @@ export function Header() {
 
           {/* Acciones */}
           <div className="flex items-center gap-1">
-            <form onSubmit={submitSearch} className="hidden lg:block">
-              <div className="relative">
-                <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                <input
-                  value={query}
-                  onChange={(e) => setQuery(e.target.value)}
-                  placeholder="Buscar…"
-                  aria-label="Buscar productos"
-                  className="h-9 w-40 rounded-full border border-input bg-muted/50 pl-9 pr-3 text-sm transition-all focus:w-56 focus:outline-none focus:ring-2 focus:ring-ring/50"
-                />
-              </div>
-            </form>
+            {content.showSearch && (
+              <form onSubmit={submitSearch} className="hidden lg:block">
+                <div className="relative">
+                  <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                  <input
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                    placeholder="Buscar…"
+                    aria-label="Buscar productos"
+                    className="h-9 w-40 rounded-full border border-input bg-muted/50 pl-9 pr-3 text-sm transition-all focus:w-56 focus:outline-none focus:ring-2 focus:ring-ring/50"
+                  />
+                </div>
+              </form>
+            )}
 
             <ThemeToggle />
 

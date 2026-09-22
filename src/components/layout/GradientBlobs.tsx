@@ -24,8 +24,9 @@ const BLOBS: BlobSpec[] = [
  * que flotan suavemente y se desplazan con parallax al hacer scroll.
  * Decorativo (aria-hidden), sin captura de clics y respetando reduced-motion.
  */
-export function GradientBlobs() {
+export function GradientBlobs({ intensity = 55 }: { intensity?: number }) {
   const wrapsRef = React.useRef<Array<HTMLDivElement | null>>([]);
+  const layerOpacity = Math.max(0.1, Math.min(1, intensity / 100));
 
   React.useEffect(() => {
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -56,7 +57,7 @@ export function GradientBlobs() {
   }, []);
 
   return (
-    <div className="blobs-layer" aria-hidden="true">
+    <div className="blobs-layer" aria-hidden="true" style={{ opacity: layerOpacity }}>
       {BLOBS.map((b, i) => (
         <div
           key={i}

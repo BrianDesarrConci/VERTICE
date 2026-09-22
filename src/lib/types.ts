@@ -67,19 +67,74 @@ export interface Review {
   avatar?: string;
 }
 
-/** Contenido editable del sitio (CMS ligero, hoja Configuracion). */
+export type SeasonalEffect = 'none' | 'hearts' | 'snow' | 'leaves' | 'confetti' | 'spooky' | 'stars';
+export type RadiusStyle = 'sharp' | 'soft' | 'round';
+export type ButtonStyle = 'pill' | 'rounded';
+export type HeroAlign = 'left' | 'center';
+
+/** Contenido editable del sitio (CMS ligero; se guarda como JSON en Configuracion). */
 export interface SiteContent {
+  // --- Portada (hero) ---
   heroEyebrow: string;
   heroTitle: string;
   heroHighlight: string;
   heroSubtitle: string;
   heroImage: string;
-  announcement: string; // barra superior deslizante
+  heroCtaText: string;
+  heroCtaLink: string;
+  heroSecondaryText: string;
+  heroAlign: HeroAlign;
+  heroOverlay: number; // 0..100 intensidad del oscurecido
+
+  // --- Barra de anuncios ---
+  announcement: string;
+  showAnnouncement: boolean;
+
+  // --- Encabezado ---
+  showSearch: boolean;
+
+  // --- Secciones del home (mostrar/ocultar + títulos) ---
+  showCategories: boolean;
+  categoriesTitle: string;
+  showTrending: boolean;
+  trendingTitle: string;
+  showNew: boolean;
+  newTitle: string;
+  showReviewsHome: boolean;
+  showNewsletter: boolean;
+  newsletterTitle: string;
+  showPromo: boolean;
+
+  // --- Bloque promocional ---
   promoTitle: string;
   promoText: string;
+
+  // --- ¿Quiénes Somos? ---
   aboutTitle: string;
   aboutText: string;
   aboutImage: string;
+
+  // --- Estética global ---
+  radius: RadiusStyle;
+  buttonStyle: ButtonStyle;
+
+  // --- Efectos y temporada ---
+  showBlobs: boolean;
+  blobIntensity: number; // 0..100
+  seasonalEffect: SeasonalEffect;
+  seasonBadge: string; // texto opcional del sello de temporada
+
+  // --- Footer + contacto + redes ---
+  footerText: string;
+  instagramUrl: string;
+  facebookUrl: string;
+  tiktokUrl: string;
+  whatsappNumber: string; // solo dígitos, ej: 573001234567
+  showWhatsappFloat: boolean;
+  contactEmail: string;
+  contactPhone: string;
+  contactAddress: string;
+  contactHours: string;
 }
 
 export interface Category {

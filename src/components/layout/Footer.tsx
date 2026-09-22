@@ -1,5 +1,7 @@
 import { Link } from 'react-router-dom';
-import { Instagram, Facebook, Twitter, Youtube, ShieldCheck, Truck, CreditCard } from 'lucide-react';
+import { Instagram, Facebook, Music2, Mail, Phone, MapPin, ShieldCheck, Truck, CreditCard } from 'lucide-react';
+import { useSiteContent } from '@/hooks/useSiteContent';
+import { useStoreConfig } from '@/hooks/useStoreConfig';
 
 const COLUMNS = [
   {
@@ -30,6 +32,14 @@ const COLUMNS = [
 ];
 
 export function Footer() {
+  const content = useSiteContent();
+  const config = useStoreConfig();
+  const socials = [
+    { url: content.instagramUrl, Icon: Instagram },
+    { url: content.facebookUrl, Icon: Facebook },
+    { url: content.tiktokUrl, Icon: Music2 },
+  ].filter((s) => s.url);
+
   return (
     <footer className="mt-24 border-t border-border bg-muted/30">
       {/* Certificaciones */}
@@ -41,25 +51,38 @@ export function Footer() {
 
       <div className="container grid grid-cols-2 gap-8 py-14 md:grid-cols-5">
         <div className="col-span-2">
-          <Link to="/" className="flex items-center gap-2 text-lg font-semibold">
-            <span className="grid h-7 w-7 place-items-center rounded-lg brand-gradient text-neutral-950">V</span>
-            VÉRTICE
+          <Link to="/" className="flex items-center gap-2 font-display text-lg font-semibold">
+            {config.logoUrl ? (
+              <img src={config.logoUrl} alt={config.storeName} className="h-7 w-auto max-w-[150px] object-contain" />
+            ) : (
+              <>
+                <span className="grid h-7 w-7 place-items-center rounded-lg brand-gradient text-neutral-950">{config.storeName.charAt(0)}</span>
+                {config.storeName}
+              </>
+            )}
           </Link>
-          <p className="mt-3 max-w-xs text-sm text-muted-foreground">
-            Merchandising que deja huella. Camisetas, hoodies, libretas y más, estampados con
-            calidad premium y envío a todo el país.
-          </p>
-          <div className="mt-4 flex gap-2">
-            {[Instagram, Facebook, Twitter, Youtube].map((Icon, i) => (
-              <a
-                key={i}
-                href="#"
-                aria-label="Red social"
-                className="grid h-9 w-9 place-items-center rounded-full border border-border text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-              >
-                <Icon className="h-4 w-4" />
-              </a>
-            ))}
+          <p className="mt-3 max-w-xs text-sm text-muted-foreground">{content.footerText}</p>
+          {socials.length > 0 && (
+            <div className="mt-4 flex gap-2">
+              {socials.map(({ url, Icon }, i) => (
+                <a
+                  key={i}
+                  href={url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Red social"
+                  className="grid h-9 w-9 place-items-center rounded-full border border-border text-muted-foreground transition-colors hover:bg-brand-500 hover:text-neutral-950"
+                >
+                  <Icon className="h-4 w-4" />
+                </a>
+              ))}
+            </div>
+          )}
+          {/* Contacto */}
+          <div className="mt-5 space-y-1.5 text-sm text-muted-foreground">
+            {content.contactEmail && <p className="flex items-center gap-2"><Mail className="h-4 w-4" /> {content.contactEmail}</p>}
+            {content.contactPhone && <p className="flex items-center gap-2"><Phone className="h-4 w-4" /> {content.contactPhone}</p>}
+            {content.contactAddress && <p className="flex items-center gap-2"><MapPin className="h-4 w-4" /> {content.contactAddress}</p>}
           </div>
         </div>
 

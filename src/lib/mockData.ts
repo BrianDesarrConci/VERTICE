@@ -173,12 +173,53 @@ export const MOCK_CONTENT: SiteContent = {
   heroHighlight: 'impacto',
   heroSubtitle: 'Moda con estampados premium para dama, caballero y niño. Diseño que deja huella, hecho para durar.',
   heroImage: img('photo-1441984904996-e0b6ba687e04'),
+  heroCtaText: 'Comprar ahora',
+  heroCtaLink: '/catalogo',
+  heroSecondaryText: 'Ver colecciones',
+  heroAlign: 'left',
+  heroOverlay: 55,
+
   announcement: '🚚 Envío GRATIS en compras sobre $200.000 · 🎁 Usa BIENVENIDA y llévate 10% OFF · Nueva colección disponible',
+  showAnnouncement: true,
+
+  showSearch: true,
+
+  showCategories: true,
+  categoriesTitle: 'Compra por categoría',
+  showTrending: true,
+  trendingTitle: 'Tendencia ahora',
+  showNew: true,
+  newTitle: 'Recién llegado',
+  showReviewsHome: true,
+  showNewsletter: true,
+  newsletterTitle: 'Únete a la comunidad VÉRTICE',
+  showPromo: true,
+
   promoTitle: '¿Merch para tu empresa o evento?',
   promoText: 'Estampamos tu marca por volumen con precios especiales y entrega a tiempo. Cotización en menos de 24h.',
+
   aboutTitle: 'Somos VÉRTICE',
   aboutText: 'Nacimos para que lleves puesto lo que te representa. Estampamos camisetas, hoodies, libretas y más con calidad premium, procesos responsables y un equipo que ama lo que hace. Cada prenda es diseño, detalle y durabilidad.',
   aboutImage: img('photo-1489987707025-afc232f7ea0f'),
+
+  radius: 'soft',
+  buttonStyle: 'pill',
+
+  showBlobs: true,
+  blobIntensity: 55,
+  seasonalEffect: 'none',
+  seasonBadge: '',
+
+  footerText: 'Merchandising que deja huella. Camisetas, hoodies, libretas y más, estampados con calidad premium y envío a todo el país.',
+  instagramUrl: 'https://instagram.com/vertice_impacto',
+  facebookUrl: '',
+  tiktokUrl: '',
+  whatsappNumber: '',
+  showWhatsappFloat: false,
+  contactEmail: 'hola@vertice.co',
+  contactPhone: '+57 300 000 0000',
+  contactAddress: 'Medellín, Colombia',
+  contactHours: 'Lun–Sáb 9:00–18:00',
 };
 
 export const MOCK_ORDERS: Order[] = [
