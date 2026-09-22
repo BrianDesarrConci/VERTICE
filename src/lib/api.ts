@@ -180,12 +180,15 @@ export const api = {
 
   async getConfig(): Promise<StoreConfig> {
     if (USING_MOCK) return sleep(80).then(() => mockState.config);
-    return gasGet<StoreConfig>('getConfig');
+    // Merge con defaults para tolerar backends antiguos sin los campos nuevos.
+    const c = await gasGet<Partial<StoreConfig>>('getConfig');
+    return { ...MOCK_CONFIG, ...c } as StoreConfig;
   },
 
   async getContent(): Promise<SiteContent> {
     if (USING_MOCK) return sleep(80).then(() => mockState.content);
-    return gasGet<SiteContent>('getContent');
+    const c = await gasGet<Partial<SiteContent>>('getContent');
+    return { ...MOCK_CONTENT, ...c } as SiteContent;
   },
 
   async getCategories(): Promise<Category[]> {
