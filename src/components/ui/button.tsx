@@ -35,7 +35,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       ref={ref}
       disabled={disabled || loading}
       className={cn(
-        'inline-flex items-center justify-center gap-2 rounded-full font-medium',
+        'inline-flex items-center justify-center gap-2 rounded-[var(--btn-radius,9999px)] font-medium',
         'transition-all duration-300 ease-premium',
         'disabled:opacity-50 disabled:pointer-events-none select-none',
         'active:scale-[0.98]',

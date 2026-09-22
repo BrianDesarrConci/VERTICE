@@ -32,6 +32,9 @@
     --brand-800: 64 110 7;
     --brand-900: 55 92 12;
     --brand2: 190 238 0;
+
+    /* Radio de botones (lo cambia el admin: pill / rounded). */
+    --btn-radius: 9999px;
   }
 
   .dark {
@@ -174,4 +177,31 @@
   .blob {
     animation: none;
   }
+}
+
+/* ============================================================
+   Efecto de temporada: partículas (emojis) que caen.
+   ============================================================ */
+.season-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  overflow: hidden;
+  pointer-events: none;
+}
+.season-particle {
+  position: absolute;
+  top: -12vh;
+  user-select: none;
+  animation: season-fall linear infinite;
+  will-change: transform, opacity;
+}
+@keyframes season-fall {
+  0% { transform: translateY(-12vh) rotate(0deg); opacity: 0; }
+  10% { opacity: 0.95; }
+  90% { opacity: 0.9; }
+  100% { transform: translateY(112vh) rotate(360deg); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .season-particle { animation: none; display: none; }
 }
