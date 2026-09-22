@@ -26,35 +26,27 @@ const config: Config = {
           DEFAULT: 'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))',
         },
-        // Verde lima marca — 500 = #7DD100 (principal).
+        // Marca dinámica: canales RGB en variables CSS (las fija el admin).
         brand: {
-          50: '#f4fce1',
-          100: '#e6f9bd',
-          200: '#d3f38a',
-          300: '#bdea54',
-          400: '#a3de26',
-          500: '#7DD100',
-          600: '#6bb800',
-          700: '#528e00',
-          800: '#406e07',
-          900: '#375c0c',
+          50: 'rgb(var(--brand-50) / <alpha-value>)',
+          100: 'rgb(var(--brand-100) / <alpha-value>)',
+          200: 'rgb(var(--brand-200) / <alpha-value>)',
+          300: 'rgb(var(--brand-300) / <alpha-value>)',
+          400: 'rgb(var(--brand-400) / <alpha-value>)',
+          500: 'rgb(var(--brand-500) / <alpha-value>)',
+          600: 'rgb(var(--brand-600) / <alpha-value>)',
+          700: 'rgb(var(--brand-700) / <alpha-value>)',
+          800: 'rgb(var(--brand-800) / <alpha-value>)',
+          900: 'rgb(var(--brand-900) / <alpha-value>)',
         },
-        // Secundario #BEEE00 (amarillo-lima) para acentos y degradados.
         lime2: {
-          DEFAULT: '#BEEE00',
-          soft: '#d6f24d',
+          DEFAULT: 'rgb(var(--brand2) / <alpha-value>)',
         },
       },
       fontFamily: {
-        sans: [
-          'Inter',
-          '"SF Pro Display"',
-          '-apple-system',
-          'BlinkMacSystemFont',
-          'Segoe UI',
-          'system-ui',
-          'sans-serif',
-        ],
+        // Tipografía profesional: cuerpo Plus Jakarta Sans, títulos Sora.
+        sans: ['"Plus Jakarta Sans"', 'Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'system-ui', 'sans-serif'],
+        display: ['Sora', '"Plus Jakarta Sans"', 'Inter', 'system-ui', 'sans-serif'],
       },
       borderRadius: {
         lg: 'var(--radius)',
@@ -64,7 +56,11 @@ const config: Config = {
       boxShadow: {
         soft: '0 1px 2px rgba(0,0,0,0.04), 0 8px 24px rgba(0,0,0,0.06)',
         lift: '0 10px 40px rgba(0,0,0,0.12)',
-        glow: '0 8px 30px rgba(125,209,0,0.35)',
+        glow: '0 6px 20px rgb(var(--brand-500) / 0.35)',
+        // Sombras para botones profesionales (relieve sutil + realismo).
+        btn: '0 1px 2px rgba(0,0,0,0.10), 0 2px 8px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.15)',
+        'btn-brand': '0 4px 14px rgb(var(--brand-500) / 0.45), inset 0 1px 0 rgba(255,255,255,0.35)',
+        'btn-brand-hover': '0 8px 24px rgb(var(--brand-500) / 0.55), inset 0 1px 0 rgba(255,255,255,0.45)',
       },
       transitionTimingFunction: {
         premium: 'cubic-bezier(0.16, 1, 0.3, 1)',

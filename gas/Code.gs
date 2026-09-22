@@ -193,6 +193,9 @@ function getConfig_() {
     freeShippingThreshold: Number(map.freeShippingThreshold) || FREE_SHIPPING_THRESHOLD,
     flatShipping: Number(map.flatShipping) || FLAT_SHIPPING,
     storeName: map.storeName || 'VÉRTICE',
+    primaryColor: map.primaryColor || '#7DD100',
+    secondaryColor: map.secondaryColor || '#BEEE00',
+    logoUrl: map.logoUrl || '',
   };
 }
 
@@ -380,6 +383,9 @@ function saveConfig_(config) {
   upsertConfigKey_('freeShippingThreshold', config.freeShippingThreshold);
   upsertConfigKey_('flatShipping', config.flatShipping);
   upsertConfigKey_('storeName', config.storeName);
+  upsertConfigKey_('primaryColor', config.primaryColor);
+  upsertConfigKey_('secondaryColor', config.secondaryColor);
+  upsertConfigKey_('logoUrl', config.logoUrl);
   return config;
 }
 
@@ -440,7 +446,7 @@ function seedData() {
   var img = function (id) { return 'https://images.unsplash.com/' + id + '?auto=format&fit=crop&w=1200&q=80'; };
 
   // Config + contenido
-  [['currency', 'COP'], ['currencySymbol', '$'], ['taxRate', TAX_RATE], ['freeShippingThreshold', FREE_SHIPPING_THRESHOLD], ['flatShipping', FLAT_SHIPPING], ['storeName', 'VÉRTICE'], ['content', JSON.stringify(defaultContent_())]]
+  [['currency', 'COP'], ['currencySymbol', '$'], ['taxRate', TAX_RATE], ['freeShippingThreshold', FREE_SHIPPING_THRESHOLD], ['flatShipping', FLAT_SHIPPING], ['storeName', 'VÉRTICE'], ['primaryColor', '#7DD100'], ['secondaryColor', '#BEEE00'], ['logoUrl', ''], ['content', JSON.stringify(defaultContent_())]]
     .forEach(function (r) { getSheet_(SHEETS.CONFIG).appendRow(r); });
 
   // Cupones

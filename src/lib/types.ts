@@ -173,6 +173,9 @@ export interface StoreConfig {
   freeShippingThreshold: number;
   flatShipping: number;
   storeName: string;
+  primaryColor: string; // hex, color principal de marca
+  secondaryColor: string; // hex, color secundario
+  logoUrl: string; // URL del logo (vacío = logotipo por texto)
 }
 
 /** Respuesta estandarizada del backend GAS. */

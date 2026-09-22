@@ -112,7 +112,7 @@ export function Product() {
             </span>
             {product.isNew && <Badge tone="brand">Nuevo</Badge>}
           </div>
-          <h1 className="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">{product.name}</h1>
+          <h1 className="mt-2 font-display text-3xl font-bold tracking-tight sm:text-4xl">{product.name}</h1>
 
           <div className="mt-3 flex items-center gap-2">
             <div className="flex">
