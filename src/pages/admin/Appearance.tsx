@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Check, Eye, Palette, RotateCcw, ShoppingBag, Sparkles, Star } from 'lucide-react';
 import type { SiteContent, StoreConfig } from '@/lib/types';
 import { api } from '@/lib/api';
+import { MOCK_CONFIG, MOCK_CONTENT } from '@/lib/mockData';
 import { useAsync } from '@/hooks/useAsync';
 import { setStoreConfigCache } from '@/hooks/useStoreConfig';
 import { setSiteContentCache } from '@/hooks/useSiteContent';
@@ -30,8 +31,8 @@ export function Appearance() {
   const [content, setContent] = React.useState<SiteContent | null>(null);
   const [saving, setSaving] = React.useState(false);
 
-  React.useEffect(() => { if (cfg.data) setConfig(cfg.data); }, [cfg.data]);
-  React.useEffect(() => { if (cnt.data) setContent(cnt.data); }, [cnt.data]);
+  React.useEffect(() => { if (cfg.data) setConfig({ ...MOCK_CONFIG, ...cfg.data }); }, [cfg.data]);
+  React.useEffect(() => { if (cnt.data) setContent({ ...MOCK_CONTENT, ...cnt.data }); }, [cnt.data]);
 
   if (!config || !content) {
     return (
@@ -91,7 +92,7 @@ export function Appearance() {
               <p className="mb-2 text-sm font-medium">Paletas rápidas</p>
               <div className="flex flex-wrap gap-2">
                 {PRESETS.map((p) => {
-                  const active = p.primary.toLowerCase() === config.primaryColor.toLowerCase();
+                  const active = p.primary.toLowerCase() === (config.primaryColor || '').toLowerCase();
                   return (
                     <button
                       key={p.name}
